@@ -1,4 +1,4 @@
-# Diego Alberto Barriga Martínez
+# Luis Alejandro Méndez Pérez
 
 - Número de cuenta: `422079336`
 - User de Github: @Luisin-mdz
