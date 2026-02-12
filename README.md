@@ -15,6 +15,8 @@ Repositorio con las prácticas de laboratorio para la materia de Lingüística C
 
 ## Entregas
 
+- **Entregables serán a través de GitHub usando git, forks y pull requests**
+  - Para mas información revisa el notebook `notebooks/0_lab_intro.ipynb`
 - Es muy recomendable entregar las prácticas ya que representa un porcentaje importante de su calificación (`30%`) 🤓
 - Se dará ~2 semanas para entregar ejercicios (dependiendo de la práctica)
     - En caso de **entregas tardías** abrá una penalización `-1 punto` por cada día
