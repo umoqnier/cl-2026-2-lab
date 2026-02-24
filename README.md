@@ -61,3 +61,36 @@ $ cat README.md
 
 - [Esquite](https://github.com/ElotlMX/Esquite/)
 ```
+
+## Tarea 1: Exploración de Niveles del lenguaje 🔭
+
+### FECHA DE ENTREGA: 10 de Marzo 2026 at 11:59pm
+
+### Fonética
+
+1. Con base en el sistema de búsqueda visto en la práctica 1, dónde se recibe una palabra ortográfica y devuelve sus transcripciones fonológicas, proponga una solución para los casos en que la palabra buscada no se encuentra en el lexicón/diccionario.
+    - ¿Cómo devolver o **aproximar** su transcripción fonológica?
+    - Reutiliza el sistema de búsqueda visto en clase y mejóralo con esta funcionalidad.
+    - Muestra al menos tres ejemplos
+
+### Morfología
+
+2. Elige tres lenguas del corpus que pertenezcan a familias lingüísticas distintas
+   - Ejemplo: `spa` (Romance), `eng` (Germánica), `hun` (Urálica)
+   - Para cada una de las tres lenguas calcula y compara:
+       -  **Ratio morfemas / palabra**: El promedio de morfemas que componen las palabras
+        -  **Indicé de Flexión / Derivación**: Del total de morfemas, ¿Qué porcentaje son etiquetas de flexión (`100`) y cuáles de derivación (`010`)?
+3. Visualización
+    - Genera una figura con **subplots** para comparar las lenguas lado a lado.
+    - *Plot 1*: Distribución de la longitud de los morfemas
+    - *Plot 2*: Distribución de las categorías (flexión, derivación, raíz, etc.)
+4. Con base en esta información, responde la pregunta: *¿Cuál de las tres lenguas se comporta más como una lengua aglutinante y cuál como una lengua aislante?*
+    - Justifica tu respuesta usando tus métricas y figuras
+
+### EXTRA:
+
+- Genera la [matriz de confusión](https://en.wikipedia.org/wiki/Confusion_matrix) para el etiquetador CRFs visto en clase
+- Observando las etiquetas donde el modelo falló responde las preguntas:
+    - ¿Por qué crees que se confundió?
+    - ¿Es un problema de ambigüedad léxica (la palabra tiene múltiples etiquetas)?
+    - ¿Qué *features* añadirías para solucionarlo?
