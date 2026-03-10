@@ -182,3 +182,168 @@ print(obtener_ipa_aproximado("cucharacha", es_data))
 
 # %% [markdown]
 # # Morfología
+
+# %%
+import re
+from collections import defaultdict
+
+import matplotlib.pyplot as plt
+import pandas as pd
+import requests as r
+
+# %%
+# Lenguas disponibles en el corpus
+LANGS = {
+    "ces": "Czech",
+    "eng": "English",
+    "fra": "French",
+    "hun": "Hungarian",
+    "spa": "Spanish",
+    "ita": "Italian",
+    "lat": "Latin",
+    "rus": "Russian",
+}
+
+# Categorías morfológicas del corpus
+CATEGORIES = {
+    "100": "Inflection",
+    "010": "Derivation",
+    "101": "Inflection, Compound",
+    "000": "Root",
+    "011": "Derivation, Compound",
+    "110": "Inflection, Derivation",
+    "001": "Compound",
+    "111": "Inflection, Derivation, Compound",
+}
+
+
+# %%
+def get_track_files(lang: str, track: str = "word") -> list[str]:
+    """
+    Genera los nombres de archivo del corpus SIGMORPHON
+    según el idioma y el track.
+
+    Parameters
+    ----------
+    lang : str
+        Código de idioma (ej. "spa", "eng", "hun").
+
+    track : str
+        Tipo de datos del shared task (por defecto "word").
+
+    Returns
+    -------
+    list[str]
+        Lista de archivos del corpus para ese idioma.
+    """
+
+    return [
+        f"{lang}.{track}.test.gold",
+        f"{lang}.{track}.dev",
+    ]
+
+
+# %%
+def get_raw_corpus(files: list) -> list:
+    """
+    Descarga y concatena archivos TSV del corpus SIGMORPHON.
+
+    Parameters
+    ----------
+    files : list
+        Lista de nombres de archivos a descargar.
+
+    Returns
+    -------
+    list
+        Lista de líneas del corpus descargado.
+    """
+
+    result = []
+
+    for file in files:
+        print(f"Downloading {file}.tsv", end=" ")
+        response = r.get(
+            f"https://raw.githubusercontent.com/sigmorphon/2022SegmentationST/main/data/{file}.tsv"
+        )
+        print(f"status={response.status_code}")
+
+        lines = response.text.split("\n")
+        result.extend(lines[:-1])
+
+    return result
+
+
+# %%
+def raw_corpus_to_dataframe(corpus_list: list, lang: str) -> pd.DataFrame:
+    """
+    Convierte el corpus en un DataFrame para análisis.
+    """
+
+    data_list = []
+
+    for line in corpus_list:
+
+        try:
+            word, tagged_data, category = line.split("\t")
+
+        except ValueError:
+            word, tagged_data = line.split("\t")
+            category = "NOT_FOUND"
+
+        morphemes = tagged_data.split()
+
+        data_list.append(
+            {
+                "words": word,
+                "morph": morphemes,
+                "category": category,
+                "lang": lang,
+            }
+        )
+
+    df = pd.DataFrame(data_list)
+
+    df["word_len"] = df["words"].apply(lambda word: len(word))
+    df["morph_count"] = df["morph"].apply(lambda m: len(m))
+
+    return df
+
+
+# %%
+# Lenguas que analizaremos
+langs = ["spa", "rus", "hun"]
+
+# %%
+dfs = []
+
+for lang in langs:
+    print(f"\nProcesando {lang} ({LANGS[lang]})")
+
+    files = get_track_files(lang)
+    raw = get_raw_corpus(files)
+
+    df_lang = raw_corpus_to_dataframe(raw, lang=lang)
+    dfs.append(df_lang)
+
+df_all = pd.concat(dfs)
+
+df_all.head()
+
+# %%
+ratio = df_all.groupby("lang")["morph_count"].mean()
+
+print("Ratio morfemas/palabra:")
+print(ratio)
+
+# %%
+inflection = (df_all["category"] == "100").groupby(df_all["lang"]).mean()
+
+print("Porcentaje de flexión (100):")
+print(inflection)
+
+# %%
+derivation = (df_all["category"] == "010").groupby(df_all["lang"]).mean()
+
+print("Porcentaje de derivación (010):")
+print(derivation)
