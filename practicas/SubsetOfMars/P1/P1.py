@@ -347,3 +347,34 @@ derivation = (df_all["category"] == "010").groupby(df_all["lang"]).mean()
 
 print("Porcentaje de derivación (010):")
 print(derivation)
+
+# %%
+fig, axes = plt.subplots(1, 2, figsize=(14,5))
+
+# Plot 1: número de morfemas por palabra
+for lang in langs:
+    subset = df_all[df_all["lang"] == lang]
+    axes[0].hist(subset["morph_count"], bins=10, alpha=0.5, label=LANGS[lang])
+
+axes[0].legend()
+axes[0].set_title("Distribución del número de morfemas por palabra")
+axes[0].set_xlabel("Número de morfemas")
+axes[0].set_ylabel("Frecuencia")
+
+# Plot 2: categorías morfológicas
+category_counts = df_all.groupby(["lang","category"]).size().unstack(fill_value=0)
+
+category_counts.plot(kind="bar", ax=axes[1])
+
+axes[1].set_title("Distribución de categorías morfológicas")
+axes[1].set_xlabel("Lengua")
+axes[1].set_ylabel("Frecuencia")
+
+plt.tight_layout()
+plt.show()
+
+# %% [markdown]
+# ## Análisis 
+
+# %% [markdown]
+# ## Conclusión
