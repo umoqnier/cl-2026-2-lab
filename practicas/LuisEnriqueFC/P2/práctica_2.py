@@ -446,3 +446,24 @@ fig_italy.show()
 #
 #
 # Respecto a la región con mayor diversidad podría facilmente como vemos ser parte del centro y sur-oeste del país con mayor diversidad de familias desde el centro a la parte colindante con guatemala, si bien existen fmailias muy presentes y dominantes dentro de la región existen muchas otras alrededor extendiendosé por toda la región y conviviento varias de ellas dentro de las mismas regiones
+
+# %% [markdown]
+# ### REFERENCIAS
+# 1.- Riaz, A. (2023, January 30). Cómo convertir el diccionario Python en Pandas DataFrame. Delft Stack. https://www.delftstack.com/es/howto/python-pandas/how-to-convert-python-dictionary-to-pandas-dataframe/
+#
+# 2.- elotl. (2025, March 5). PyPI. https://pypi.org/project/elotl/
+#
+# 3.- Resuelto:7.- ¿Cuáles son las coordenadas geográficas extremas de México según el mapa?
+# A) Longitud. (2025, May 20). Gauth. https://mx.gauthmath.com/solution/1832600210452498/7-Cu-les-son-las-coordenadas-geogr-ficas-extremas-de-M-xico-seg-n-el-mapa-A-Long
+#
+# 4.- Martínez, F. (2023, January 31). Ubicación Geográfica de México: Mapa y coordenadas geográficas. paratodomexico.com. https://paratodomexico.com/geografia-de-mexico/ubicacion-geografica.html
+#
+# 5.- Glottolog 5.3 -. (s. f.). https://glottolog.org/meta/downloads
+#
+# 6.- colaboradores de Wikipedia. (2025, September 23). Geografía de Italia. Wikipedia, La Enciclopedia Libre. https://es.wikipedia.org/wiki/Geograf%C3%ADa_de_Italia
+#
+# 7.- ¿Qué es Plotly en Python y cómo se utiliza? (2025, June 9). Glarity. https://askai.glarity.app/es/search/%C2%BFQu%C3%A9-es-Plotly-en-Python-y-c%C3%B3mo-se-utiliza
+#
+# 8.- coordinates-converter.com. (n.d.). Coordenadas italia con convertidor a todos los sistemas de coordenadas | UTM, WSG. . . Online-Umrechner in Alle Gängigen Koordinatensysteme Wie UTM, WGS, WGS84 Und CH1903, Gauss-Krueger Mit Grosser Karte. https://coordinates-converter.com/es/search/Italia
+#
+# 9.- mapbox. (n.d.). PyPI. https://pypi.org/project/mapbox/
