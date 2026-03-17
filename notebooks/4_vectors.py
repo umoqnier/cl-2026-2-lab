@@ -114,7 +114,7 @@ bag_of_words_corpus.toarray()
 
 # %%
 print(len(bag_of_words_corpus.toarray()))
-bag_of_words_corpus.toarray()[2]
+len(bag_of_words_corpus.toarray()[1])
 
 
 # %% [markdown]
@@ -141,7 +141,7 @@ titles = ["ADA", "BROCOLI", "FIXED"]
 docs_matrix = create_bow_dataframe(
     documents,
     titles,
-    vectorizer=CountVectorizer(tokenizer=simple_preprocess, token_pattern=None),
+    vectorizer=CountVectorizer(tokenizer=simple_preprocess, token_pattern=None)#, binary=True),
 )
 
 # %%
@@ -299,7 +299,7 @@ for i, syn in enumerate(synsets_banco[:3]):
     print(f"  Ejemplos: {syn.examples()}")
 
 # %% colab={"base_uri": "https://localhost:8080/"} id="pObOb5BbWNf_" outputId="67ecebeb-4ec9-42a9-ba40-17ba51409a6d"
-synsets_auto = wn.synsets("auto", lang="spa")
+synsets_auto = wn.synsets("correr", lang="spa")
 for syn in synsets_auto:
     # Obtenemos las palabras (lemas) asociadas a este sentido en español
     lemas_español = syn.lemma_names("spa")
@@ -393,9 +393,6 @@ print(f"Similitud Perro - Carro: {sim_perro_carro:.2f}")
 
 # %% [markdown] id="FZLBAiowchfx"
 # _S = The dusty road ends nowhere. The dusty track ends there._
-
-# %%
-nltk.download("stopwords")
 
 # %% id="l5q56bXTfj2v"
 S = "The dusty road ends nowhere. The dusty track ends there."
@@ -558,13 +555,16 @@ print(vector.shape)
 word_vectors.similarity("cat", "tree")
 
 # %%
+word_vectors.similarity("cat", "dog")
+
+# %%
 word_vectors.similarity("technology", "mexico")
 
 # %% colab={"base_uri": "https://localhost:8080/"} id="jYC3q-rJTCmS" outputId="ce7177de-23ba-4f5c-9134-b57fe07c078f"
-word_vectors.most_similar("obama", topn=10)
+word_vectors.most_similar("epstein", topn=10)
 
 # %%
-word_vectors.most_similar(negative="banana")
+word_vectors.most_similar("devil")
 
 # %% colab={"base_uri": "https://localhost:8080/", "height": 34} id="xHKcUho5TasO" outputId="9fd9b999-1825-4889-8bea-359da6e6b926"
 word_vectors.doesnt_match("car motor python oil mustang".split())
@@ -573,13 +573,14 @@ word_vectors.doesnt_match("car motor python oil mustang".split())
 word_vectors.n_similarity(["mexican", "market"], ["japanese", "restaurant"])
 
 # %%
-word_vectors.n_similarity(["apple", "banana"], ["car", "motor"])
+word_vectors.n_similarity(["apple", "banana"], ["pear", "grape"])
 
 # %% colab={"base_uri": "https://localhost:8080/"} id="soHDSo8hXTja" outputId="9311ec3f-250c-4aa3-ce00-25bb195001c9"
 word_vectors.distance("dog", "cat")
 
 # %% colab={"base_uri": "https://localhost:8080/"} id="yvVxSf8MXeC7" outputId="4fad3355-bcd5-4a19-9b08-2600499ca483"
-word_vectors.most_similar(positive=["london", "australia"], negative=["england"])
+word_vectors.most_similar(positive=["london", "australia"],
+ negative=["england"])
 
 
 # %%
