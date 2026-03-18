@@ -27,6 +27,7 @@
 # - Explorar propiedades estadísticas del lenguaje natural y observar los siguientes fenomenos:
 #     - La distribución de Zipf
 #     - La distribución de Heap
+# - Explorar datos que muestren la diversidad lingüística de las lenguas del mundo
 
 # ## Perspectivas formales
 
@@ -68,7 +69,7 @@ import nltk
 
 grammar = nltk.CFG.fromstring(plain_grammar)
 # Cambiar analizador y trace
-analyzer = nltk.ChartParser(grammar)
+analyzer = nltk.ChartParser(grammar, trace=True)
 
 sentence = "I shot an elephant in my pajamas".split()
 trees = analyzer.parse(sentence)
@@ -132,6 +133,10 @@ doc = nlp("La niña come un suani")
 
 displacy.render(doc, style="dep")
 
+# +
+# doc?
+# -
+
 for chunk in doc.noun_chunks:
     print("text::", chunk.text)
     print("root::", chunk.root.text)
@@ -191,10 +196,13 @@ displacy.render(docs, style="ent")
 
 # ## Leyes estadísticas
 
+# +
 # Bibliotecas
 from collections import Counter
 import matplotlib.pyplot as plt
-plt.rcParams['figure.figsize'] = [10, 6]
+
+plt.rcParams["figure.figsize"] = [10, 6]
+# -
 
 mini_corpus = """Humanismo es un concepto polisémico que se aplica tanto al estudio de las letras humanas, los
 estudios clásicos y la filología grecorromana como a una genérica doctrina o actitud vital que
@@ -263,6 +271,7 @@ corpus = dataset.take(10000)
 # +
 import re
 
+
 def normalize_corpus(example):
     example["text"] = re.sub(r"[\W]", " ", example["text"])
     example["text"] = example["text"].lower()
@@ -291,6 +300,7 @@ words.most_common(10)
 
 # +
 import pandas as pd
+
 
 def counter_to_pandas(counter: Counter) -> pd.DataFrame:
     df = pd.DataFrame.from_dict(counter, orient="index").reset_index()
@@ -346,12 +356,13 @@ from scipy.optimize import minimize
 
 # Obtenemos los ranks y las frecuencias del corpus
 # # +1 para hacer que los ranks inicien en 1 y no en 0
-ranks = np.array(corpus_freqs.index) + 1  
+ranks = np.array(corpus_freqs.index) + 1
 frequencies = np.array(corpus_freqs["count"])
 
-def zipf_minimization_objective(alpha: np.float64,
-                               word_ranks: np.ndarray,
-                               word_frequencies: np.ndarray) -> np.float64:
+
+def zipf_minimization_objective(
+    alpha: np.float64, word_ranks: np.ndarray, word_frequencies: np.ndarray
+) -> np.float64:
     """
     Calculate the sum of squared errors for Zipf's law fit.
 
@@ -372,18 +383,19 @@ def zipf_minimization_objective(alpha: np.float64,
     predicted_log_freq = np.log(word_frequencies[0]) - alpha * np.log(word_ranks)
     return np.sum((np.log(word_frequencies) - predicted_log_freq) ** 2)
 
+
 # Parámeto alfa inicial
 initial_alpha_guess = 1.0
 
 optimization_result = minimize(
-    zipf_minimization_objective,
-    initial_alpha_guess,
-    args=(ranks, frequencies)
+    zipf_minimization_objective, initial_alpha_guess, args=(ranks, frequencies)
 )
 estimated_alpha = optimization_result.x[0]
 
 mean_squared_error = zipf_minimization_objective(estimated_alpha, ranks, frequencies)
-print(f"Estimated alpha: {estimated_alpha:.4f}\nMean Squared Error: {mean_squared_error:.4f}")
+print(
+    f"Estimated alpha: {estimated_alpha:.4f}\nMean Squared Error: {mean_squared_error:.4f}"
+)
 
 
 # -
@@ -471,40 +483,41 @@ mexico_languages = languages[
 
 # +
 # Reconstrucción de linajes usando grafos locales (languoid.csv)
-languoids_dict = languoids.set_index('id').to_dict('index')
+languoids_dict = languoids.set_index("id").to_dict("index")
+
 
 def reconstruir_linaje(glottocode):
     """Sube por el árbol genealógico desde la lengua hasta la familia raíz."""
     linaje = []
     current_id = glottocode
-    
+
     # Mientras el ID actual exista y no sea nulo (NaN)
     while pd.notna(current_id) and current_id in languoids_dict:
         nodo = languoids_dict[current_id]
-        
+
         # Filtramos lenguas artificiales o "bookkeeping"
-        if nodo.get('bookkeeping') or nodo.get('name') == 'Unclassifiable':
+        if nodo.get("bookkeeping") or nodo.get("name") == "Unclassifiable":
             return "Unclassifiable"
-            
+
         # Insertamos el nombre al inicio de la lista para mantener el orden (Raíz -> Lengua)
-        linaje.insert(0, str(nodo['name']))
-        
+        linaje.insert(0, str(nodo["name"]))
+
         # Subimos al nodo padre
-        current_id = nodo['parent_id']
-        
+        current_id = nodo["parent_id"]
+
     return " > ".join(linaje)
 
 
 # +
 # Aplicamos la función a nuestras lenguas de México
 mexico_languages = mexico_languages.copy()
-mexico_languages['tree'] = mexico_languages['glottocode'].apply(reconstruir_linaje)
+mexico_languages["tree"] = mexico_languages["glottocode"].apply(reconstruir_linaje)
 
 # Filtramos las que no se pudieron clasificar
-df = mexico_languages[~mexico_languages['tree'].isin(['', "Unclassifiable"])].copy()
+df = mexico_languages[~mexico_languages["tree"].isin(["", "Unclassifiable"])].copy()
 
 # Extraemos la familia lingüística (la primera palabra del linaje)
-df['Family'] = df['tree'].str.split().str[0]
+df["Family"] = df["tree"].str.split().str[0]
 df.set_index("glottocode", inplace=True)
 df.head()
 # -
@@ -514,6 +527,7 @@ p["tree"]["huic1243"]
 
 # +
 import plotly.graph_objects as go
+
 
 def longest_common_prefix(str1, str2):
     """Calcula el ratio del prefijo común más largo entre dos linajes."""
@@ -525,9 +539,10 @@ def longest_common_prefix(str1, str2):
             common_prefix += str1[i]
         else:
             break
-            
+
     # Normalizamos el resultado
     return len(common_prefix) / min_length if min_length > 0 else 0
+
 
 # Creamos la matriz de distancias vacía
 n = len(df)
@@ -536,28 +551,33 @@ distance_matrix = pd.DataFrame(index=df.index, columns=df.index, dtype=float)
 # Poblamos la matriz calculando la similitud por pares
 for i in range(n):
     for j in range(i, n):
-        distance = longest_common_prefix(df['tree'].iloc[i], df['tree'].iloc[j])
+        distance = longest_common_prefix(df["tree"].iloc[i], df["tree"].iloc[j])
         distance_matrix.iloc[i, j] = distance
         distance_matrix.iloc[j, i] = distance
 
 distance_df = pd.DataFrame(distance_matrix.values, index=df.index, columns=df.index)
 
 # Ordenamos las lenguas por familia para una mejor visualización en el mapa de calor
-ordered_languages = df.sort_values('Family').index
-ordered_similarity_df = distance_df.reindex(index=ordered_languages, columns=ordered_languages)
+ordered_languages = df.sort_values("Family").index
+ordered_similarity_df = distance_df.reindex(
+    index=ordered_languages, columns=ordered_languages
+)
 # -
 
 ordered_similarity_df.head()
 
 # +
 # Mapeamos los glottocodes a los nombres reales de las lenguas para las etiquetas
-labels = ordered_similarity_df.columns.map(lambda x: df.loc[x, 'name'])
+labels = ordered_similarity_df.columns.map(lambda x: df.loc[x, "name"])
 
 # Generamos el mapa de calor
 fig = go.Figure(data=go.Heatmap(z=ordered_similarity_df, x=labels, y=labels))
-fig.update_layout(title='Matriz de Similitud Genealógica',
-                  xaxis={'side': 'top'},
-                  width=1200, height=1200)
+fig.update_layout(
+    title="Matriz de Similitud Genealógica",
+    xaxis={"side": "top"},
+    width=1200,
+    height=1200,
+)
 fig.show()
 # -
 

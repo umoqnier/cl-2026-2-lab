@@ -145,3 +145,35 @@ Explorar la plataforma [Hugging Face Datasets](https://huggingface.co/datasets) 
 
 > [!TIP]
 > Utiliza bibliotecas con modelos preentrenados que te permitan realizar el etiquetado NER como [`spacy`](https://spacy.io/usage) o [`stanza`](https://stanfordnlp.github.io/stanza/#getting-started).
+
+## Práctica 3: Representaciones Vectoriales
+
+**Fecha de entrega: 31 de Marzo de 2026 @ 11:59pm**
+
+### Matrices dispersas y búsqueda de documentos
+
+Este apartado requiere que construyas un motor de búsqueda entre documentos comparando el rendimiento de una Bolsa de Palabras (BoW) y TF-IDF para procesar un documento "tramposo" (documento con muchas palabras que aportan poco significado o valor temático):
+
+1. Define una lista de 5 documentos cortos divididos en dos temas contrastantes.
+    - Ej: 3 de Revolución Rusa y 2 de comida vegana.
+2. Crea una query "tramposa", esto es, crea un documento dirigido a alguna temática pero repitiendo intencionalmente palabras comunes o verbos genéricos que aparezcan en los documentos de la otra temática.
+3. Vectoriza para crear una BoW y calcula la similitud coseno entre la query y los 5 documentos
+4. Repite el proceso usando TF-IDF
+5. Imprime un DataFrame o tabla comparativa que muestre los scores de similitud de BoW y TF-IDF del query contra los 5 documentos.
+    - ¿Cambió el documento clasificado como "más similar/relevante" al pasar de BoW a TF-IDF? Identifica el cambio si lo hubo.
+    - Explica brevemente, basándote en la penalización idf (Inverse Document Frequency), cómo y por qué TF-IDF procesó de manera distinta las palabras de tu "trampa léxica" en comparación con BoW.
+
+### Búsqueda de sesgos
+
+1. Descarga el modelo `glove-wiki-gigaword-100` con la api de `gensim` y ejecuta el siguiente código:
+
+```python
+print(word_vectors.most_similar(positive=['man', 'profession'], negative=['woman']))
+print()
+print(word_vectors.most_similar(positive=['woman', 'profession'], negative=['man']))
+```
+
+2. Identifica las diferencias en la lista de palabras asociadas a hombres/mujeres y profesiones, explica como esto reflejaría un sesgo de genero.
+3. Utiliza la función `.most_similar()` para identificar analogías que exhiba algún tipo de sesgo de los vectores pre-entrenados.
+    - Explica brevemente que sesgo identificar
+4. Si fuera tu trabajo crear un modelo ¿Como mitigarías estos sesgos al crear vectores de palabras?
