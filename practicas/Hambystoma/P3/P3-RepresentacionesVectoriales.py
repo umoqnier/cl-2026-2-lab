@@ -296,6 +296,94 @@ df_comparativo.sort_values(by='Similitud TF-IDF', ascending=False)
 # Igualmente, el texto en primer lugar bajó mucho su similaridad tras usar la TF-IDF.
 # Esto se debe a mi diseño de query tramposa que provocó que comparten mucho vocabulario aunque las palabras con significado no sean tan parecidas entre la query y "FunciónRiñon".
 
+# ## Busqueda de sesgos
+
+# ### 1. Descarga el modelo glove-wiki-gigaword-100 con la api de gensim y ejecuta el siguiente código:
+
+# ### print(word_vectors.most_similar(positive=['man', 'profession'], negative=['woman']))
+# ### print(word_vectors.most_similar(positive=['woman', 'profession'], negative=['man']))
+# 
+
+# In[1]:
+
+
+import gensim.downloader as gensim_api
+
+
+# In[2]:
+
+
+word_vectors = gensim_api.load("glove-wiki-gigaword-100")
+
+
+# In[3]:
+
+
+print(word_vectors.most_similar(positive=['man', 'profession'], negative=['woman']))
+print()
+print(word_vectors.most_similar(positive=['woman', 'profession'], negative=['man']))
+
+
+# ### 2. Identifica las diferencias en la lista de palabras asociadas a hombres/mujeres y profesiones, explica como esto reflejaría un sesgo de genero.
+
+# Las palabras que aparecen con man y profession menos woman son más teóricas y habilidosas mientras que las que aparecen con woman y profession menos man son relacionadas en su mayoría con la parte "maternal" de la mujer. Claramente estos datos son resultado de la historia machista en la que la humanidad se ha encaminado durante siglos tratando a la mujer como un extra que su deber es formar el hogar (por eso vemos palabras como "childbirth" mientras que por el otro lado vemos palabras como "discipline" o "skill" dando a entender que eso es algo más de los hombres).
+
+# ### 3. Utiliza la función .most_similar() para identificar analogías que exhiba algún tipo de sesgo de los vectores pre-entrenados.
+# ### Explica brevemente que sesgo identificar
+# 
+
+# In[15]:
+
+
+word_vectors.most_similar(positive=["black", "good"], negative=["white"])
+
+
+# Esperaría el opuesto de "good" ya que dimos dos opuestos "black" y "white"
+
+# In[17]:
+
+
+word_vectors.most_similar(positive=["salmon", "steak"], negative=["cow"])
+
+
+# Esperaría "fish" o "fillet", "lobster" y "shrimp" se acercan a la respuesta esperada pero no se relacionan directamente con salmon.
+
+# In[18]:
+
+
+word_vectors.most_similar(positive=["game", "cinema"], negative=["movie"])
+
+
+# Esperaría "arcade". Obtenemos cosas relacionadas a "game" pero no obtuvimos nada relacionado con la analogía.
+
+# In[27]:
+
+
+word_vectors.most_similar(positive=["lava", "geyser"], negative=["water"])
+
+
+# Esperaría "volcano". Aparecen varias piedras antes de las palabras relacionadas con volcano (sin que esta misma aparezca). Notemos que las piedras obtenidas en la analogía son de origen volcanico, pero de nuevo, ¿dónde está volcano por si mismo?
+
+# In[41]:
+
+
+word_vectors.most_similar(positive=["bow", "bullet"], negative=["revolver"])
+
+
+# Esperaría "arrow". Aquí no se ni que pasó, lo que más me confunde es "narrow" porque se parece morfológicamente a "arrow" pero no tienen relación semántica.
+
+# Despues de ver estas discrepancias, considero que el sesgo más grande que tiene este modelo radica en las palabras poco comunes, las cuales no logra modelar de la misma manera que otras que son de uso diario. Resulta constantemente en temas relacionados a lo que queremos llegar pero sin dar la respuesta clara.
+
+# ### 4. Si fuera tu trabajo crear un modelo ¿Como mitigarías estos sesgos al crear vectores de palabras?
+
+# Primeramente, utilizar textos modernos donde no existan representaciones racistas, clasistas o machistas para evitar relaciones que no modelan la realidad si no una ideología.
+
+# Después, trataría de agrear textos especializados para las palabras menos frecuentes como "revolver" o "gyser" para que tengan un valor vectorial más cercano al que deverían tener para cumplir sus papeles.
+# 
+# 
+
+# Para concluir, quizas podría ayudar una pequeña supervisión de desempeño después de terminar un modelo. Identificar si tiene algún sesgo desde un inicio y poder observar que fue lo que lo desencadeno. Algunas pruebas de analogías considero que son bastante buen indicador de la capacidad del modelo.
+
 # In[ ]:
 
 
