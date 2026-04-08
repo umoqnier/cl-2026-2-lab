@@ -1,0 +1,12 @@
+La resolución de sistemas de ecuaciones lineales constituye una parte central de las matemáticas aplicadas.
+Para realizar un análisis riguroso de estos sistemas, es fundamental considerar la estructura de la matriz de coeficientes y los elementos del vector de constantes.
+El objetivo principal es encontrar los valores de las incógnitas que satisfagan todas las ecuaciones simultáneamente.
+Al aplicar el método de eliminación de Gauss, buscamos desarrollar una secuencia de operaciones elementales por fila para obtener una matriz escalonada.
+De esta forma, resulta mucho más sencillo encontrar la solución mediante un proceso de sustitución hacia atrás. 
+En muchos casos, el sistema puede presentar una única solución, infinitas soluciones o ninguna solución en absoluto.
+Para determinar en cuál de estos casos nos encontramos, debemos considerar el teorema de Rouché-Frobenius, el cual nos obliga a realizar una comparación analítica entre el rango de la matriz original y el rango de la matriz ampliada.
+Si ambos rangos coinciden, logramos obtener un sistema compatible; si difieren, la matriz va a presentar una inconsistencia insalvable. Como parte del proceso numérico, es crucial aplicar técnicas de pivoteo parcial o completo. 
+Al realizar intercambios de filas para colocar los elementos de mayor magnitud en la diagonal principal, logramos desarrollar un algoritmo numéricamente estable, mitigando la acumulación de errores de redondeo.
+De esta forma, los sistemas de software pueden obtener resultados precisos incluso cuando la matriz está mal condicionada.
+Presentar la solución final de forma paramétrica es necesario cuando el sistema es indeterminado, permitiendo así encontrar todo el espacio solución.
+Siempre se debe considerar que aplicar estos métodos ingenuamente consumirá muchos recursos, por lo que se deben desarrollar y presentar rutinas optimizadas para procesar cada parte y todos los elementos de forma rápida.
