@@ -1,0 +1,18 @@
+Definición de Espacio Vectorial
+Un espacio vectorial es una estructura algebraica abstracta que constituye el objeto de estudio fundamental del álgebra lineal.
+Conceptualmente, se define como un conjunto de entidades matemáticas llamadas vectores, los cuales pueden sumarse entre sí y ser escalados (multiplicados) por números, conocidos como escalares, garantizando que el resultado de dichas operaciones siempre permanezca dentro del mismo conjunto.
+Formalmente, un espacio vectorial sobre un campo F (que generalmente representa a los números reales o a los números complejos) es un conjunto no vacío V equipado con dos operaciones principales:
+Suma de vectores: Una función que asocia a cada par de vectores u, v en V un único vector u + v que también pertenece a V (propiedad de cerradura bajo la suma).
+Multiplicación por un escalar: Una función que asocia a cada escalar c en F y a cada vector v en V un único vector cv que también pertenece a V (propiedad de cerradura bajo la multiplicación escalar).
+Para que el conjunto V sea estrictamente considerado un espacio vectorial, estas operaciones están obligadas a satisfacer rigurosamente los siguientes ocho axiomas para todos los vectores u, v, w en V y para todos los escalares a, b en F:
+Conmutatividad de la suma: u + v = v + u
+Asociatividad de la suma: $(u + v) + w = u + (v + w)
+Elemento neutro aditivo: Existe un vector único 0 en V tal que v + 0 = v
+Inverso aditivo: Para cada vector v en V, existe un vector -v en V tal que v + -v = 0
+Elemento neutro multiplicativo: $1v = v$ (donde 1 representa la identidad multiplicativa del campo F)
+Asociatividad de la multiplicación escalar: (ab)v = a(bv)
+Distributividad del escalar respecto a la suma vectorial: a(u + v) = au + av
+Distributividad del vector respecto a la suma escalar: (a + b)v = av + bv
+El ejemplo clásico e intuitivo es el espacio euclidiano Rn utilizado para modelar el espacio geométrico y físico bidimensional o tridimensional.
+No obstante, la potencia del álgebra lineal radica en su nivel de abstracción. 
+Los "vectores" de un espacio vectorial no se limitan a ser representados como flechas con magnitud y dirección; también pueden ser polinomios, matrices bidimensionales, series de tiempo, funciones continuas o distribuciones de probabilidad, siempre y cuando el conjunto y sus operaciones respeten fielmente los ocho axiomas descritos.

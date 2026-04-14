@@ -1,0 +1,9 @@
+El análisis de valores y vectores propios es otra parte esencial del álgebra lineal, vital para desarrollar soluciones en sistemas dinámicos.
+Al realizar el estudio de una matriz cuadrada, buscamos encontrar aquellos vectores no nulos que, al aplicar la transformación lineal asociada, únicamente cambian su factor de escala.
+A estos elementos se les conoce como vectores propios, y al factor de escala que logramos obtener se le denomina valor propio.
+Para encontrar estos escalares, debemos considerar la ecuación característica y calcular las raíces del polinomio resultante.
+En la mayoría de los casos, este proceso implica realizar el cálculo del determinante de una matriz modificada.
+Al obtener las raíces, la matriz puede presentar valores propios reales o complejos. Una vez que logramos encontrar todos los valores, podemos proceder a obtener los vectores propios correspondientes sustituyendo cada valor en el sistema original.
+Es importante considerar que un conjunto de vectores propios linealmente independientes puede presentar una base para todo el espacio. De esta forma, es factible desarrollar la diagonalización de la matriz, lo cual simplifica enormemente el cálculo de potencias matriciales.
+En muchos casos de la física e ingeniería, aplicar la diagonalización permite desacoplar sistemas de ecuaciones diferenciales, aislando cada parte del problema para tratarla de forma individual.
+Por lo tanto, presentar una matriz en su forma diagonal es uno de los elementos más buscados por los analistas. Sin embargo, no siempre es posible realizar esta factorización; existen casos donde la matriz no es diagonalizable, obligando a los investigadores a desarrollar métodos alternativos y aplicar descomposiciones más complejas, como la descomposición en valores singulares, para poder obtener la información necesaria y presentar un modelo funcional con todos sus elementos intactos.
