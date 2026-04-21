@@ -5,7 +5,8 @@ description = "Repositorio para prácticas de laboratorio del curso de Lingüís
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "datasets>=4.6.0",
+    "datasets==3.6.0",
+    "elotl>=0.1.1",
     "gensim>=4.4.0",
     "ipywidgets>=8.1.8",
     "jupyter>=1.1.1",
@@ -26,3 +27,35 @@ dependencies = [
     "subword-nmt>=0.3.8",
     "transformers>=5.5.0",
 ]
+
+[project.optional-dependencies]
+cpu = [
+  "torch>=2.10.0",
+]
+cu130 = [
+  "torch>=2.10.0",
+]
+
+[tool.uv]
+conflicts = [
+  [
+    { extra = "cpu" },
+    { extra = "cu130" },
+  ],
+]
+
+[tool.uv.sources]
+torch = [
+  { index = "pytorch-cpu", extra = "cpu" },
+  { index = "pytorch-cu130", extra = "cu130" },
+]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[[tool.uv.index]]
+name = "pytorch-cu130"
+url = "https://download.pytorch.org/whl/cu130"
+explicit = true
