@@ -34,8 +34,6 @@
 #   - BPE
 #   - Word-piece
 #   - Sentecepiece
-# - Entrenar modelos para sub-word tokenization
-#   - Aplicar BPE a corpus
 
 # %% [markdown]
 # ## El lenguaje, datos inherentemente desarreglados
@@ -290,7 +288,13 @@ def preprocess(words: list[str], regex: str=r"[^\w+]", lang: str="en", remove_st
 sentence_trapo = "Quitan el trapo y no lo ponen. ¿Por qué quitan el trapo? Si es una cosa que debe estar ahí."
 
 # %%
+sentence_trapo.split()
+
+# %%
 sentence_sad = "Mmmmm haz lo que quieras... pero no me digas que no te lo advertí 😓"
+
+# %%
+len(sentence_sad.split())
 
 # %% [markdown]
 # - A estas alturas tenemos cierta información acerca de las palabras:
@@ -396,8 +400,8 @@ text = """
 text.split()
 
 # %%
-# [a-zA-Z_]
-regex = r"\w+"
+# [a-zA-Z_]\
+regex = r"\w+|[?¿!¡]"
 re.findall(regex, text)
 
 # %%
@@ -438,9 +442,6 @@ brown_corpus = preprocess(brown.words()[:100000], lang="en", remove_stops=True)
 rprint(brown_corpus[:10])
 
 # %%
-rprint(brown_corpus[:10])
-
-# %%
 from collections import Counter
 
 rprint("[bright_yellow]Brown Vanilla")
@@ -454,6 +455,9 @@ rprint("Tipos:", len(Counter(brown_corpus)))
 # %% [markdown]
 # #### Steamming
 
+# %% [markdown]
+# - Chiquitititos - chico - Chiqu 
+
 # %%
 from nltk.stem.snowball import SnowballStemmer
 
@@ -461,6 +465,9 @@ stemmer = SnowballStemmer("english")
 
 # %%
 stemmed_brown = [stemmer.stem(word) for word in brown_corpus]
+
+# %%
+stemmed_brown[:10]
 
 # %% [markdown]
 # #### Lematización
@@ -485,6 +492,9 @@ def lemmatize(words: list, lang: str = "en") -> list:
 
 # %%
 lemmatized_brown = lemmatize(brown_corpus, lang="en")
+
+# %%
+lemmatized_brown[:10]
 
 # %%
 rprint("Tipos ([bright_magenta]word-based[/]):", len(Counter(brown_corpus)))
@@ -542,6 +552,8 @@ print(f"Objetivo: {text} -> {result}")
 
 # %% [markdown]
 # ### Implementación de BPE
+#
+# > Basado en el tutorial de HF - TODO LINK
 
 # %%
 corpus = clean_and_extract_sentences(moby)
@@ -687,7 +699,7 @@ SENTENCE = "Let's do this tokenization to enable hypermodernization on my tokens
 from transformers import GPT2Tokenizer
 
 bpe_tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
-rprint(bpe_tokenizer.tokenize(SENTENCE))
+print(bpe_tokenizer.tokenize(SENTENCE))
 
 # %%
 encoded_tokens = bpe_tokenizer(SENTENCE)
@@ -775,353 +787,5 @@ rprint(tokenizer.tokenize(SENTENCE))
 # - Esto ayuda a que en principio "aprendan" mejor
 # - Reducir el numero de tipos
 # - Reducir el numero de OOV
-
-# %% [markdown]
-# ### Vamos a tokenizar 🌈
-# ![](https://i.pinimg.com/736x/58/6b/88/586b8825f010ce0e3f9c831f568aafa8.jpg)
-
-# %%
-BASE_PATH = "."
-CORPORA_PATH = f"{BASE_PATH}/data/tokenization"
-MODELS_PATH = f"{BASE_PATH}/models/sub-word"
-
-# %% [markdown]
-# #### Corpus en español: CESS
-
-# %%
-nltk.download("cess_esp")
-
-# %%
-from nltk.corpus import cess_esp
-
-cess_words = cess_esp.words()
-
-# %%
-" ".join(cess_words[:30])
-
-# %%
-cess_plain_text = " ".join(preprocess(cess_words))
-
-# %%
-rprint(f"'{cess_plain_text[300:600]}'")
-
-# %%
-cess_preprocessed_words = cess_plain_text.split()
-
-# %%
-with open(f"{CORPORA_PATH}/cess_plain.txt", "w") as f:
-    f.write(cess_plain_text)
-
-# %% [markdown]
-# #### Corpus Inglés: Gutenberg
-
-# %%
-nltk.download("punkt_tab")
-
-# %%
-from nltk.corpus import gutenberg
-
-gutenberg_words = gutenberg.words()[:200000]
-
-# %%
-rprint(" ".join(gutenberg_words[:30]))
-
-# %%
-gutenberg_plain_text = " ".join(preprocess(gutenberg_words))
-
-rprint(gutenberg_plain_text[:100])
-
-# %%
-gutenberg_preprocessed_words = gutenberg_plain_text.split()
-
-# %%
-with open(f"{CORPORA_PATH}/gutenberg_plain.txt", "w") as f:
-    f.write(gutenberg_plain_text)
-
-# %% [markdown]
-# #### Tokenizando el español con Hugging face
-
-# %%
-from transformers import AutoTokenizer
-
-spanish_tokenizer = AutoTokenizer.from_pretrained(
-    "dccuchile/bert-base-spanish-wwm-uncased"
-)
-
-# %%
-rprint(spanish_tokenizer.tokenize(cess_plain_text[1000:1400]))
-
-# %%
-cess_types = Counter(cess_words)
-
-# %%
-rprint(cess_types.most_common(10))
-
-# %%
-cess_tokenized = spanish_tokenizer.tokenize(cess_plain_text)
-rprint(cess_tokenized[:10])
-cess_tokenized_types = Counter(cess_tokenized)
-
-# %%
-rprint(cess_tokenized_types.most_common(30))
-
-# %%
-cess_lemmatized_types = Counter(lemmatize(cess_words, lang="es"))
-
-# %%
-rprint(cess_lemmatized_types.most_common(30))
-
-# %%
-rprint("CESS")
-rprint(f"Tipos ([bright_magenta]word-base[/]): {len(cess_types)}")
-rprint(f"Tipos ([bright_yellow]lemmatized[/]): {len(cess_lemmatized_types)}")
-rprint(f"Tipos ([bright_green]sub-word[/]): {len(cess_tokenized_types)}")
-
-# %% [markdown]
-# #### Tokenizando para el inglés
-
-# %%
-gutenberg_types = Counter(gutenberg_words)
-
-# %%
-gutenberg_tokenized = wp_tokenizer.tokenize(gutenberg_plain_text)
-gutenberg_tokenized_types = Counter(gutenberg_tokenized)
-
-# %%
-rprint(gutenberg_tokenized_types.most_common(10))
-
-# %%
-gutenberg_lemmatized_types = Counter(lemmatize(gutenberg_preprocessed_words))
-
-# %%
-rprint(gutenberg_lemmatized_types.most_common(20))
-
-# %%
-rprint("Gutenberg")
-rprint(f"Tipos ([bright_magenta]word-base[/]): {len(gutenberg_types)}")
-rprint(f"Tipos ([bright_yellow]lemmatized[/]): {len(gutenberg_lemmatized_types)}")
-rprint(f"Tipos ([bright_green]sub-word[/]): {len(gutenberg_tokenized_types)}")
-
-# %% [markdown]
-# #### OOV: out of vocabulary
-
-# %% [markdown]
-# Palabras que se vieron en el entrenamiento pero no estan en el test
-
-# %%
-from sklearn.model_selection import train_test_split
-
-train_data, test_data = train_test_split(
-    gutenberg_words, test_size=0.3, random_state=42
-)
-rprint(len(train_data), len(test_data))
-
-# %%
-s_1 = {"a", "b", "c", "d", "e"}
-s_2 = {"a", "x", "y", "d"}
-rprint(s_1 - s_2)
-rprint(s_2 - s_1)
-
-# %%
-oov_test = set(test_data) - set(train_data)
-
-# %%
-for word in list(oov_test)[:3]:
-    rprint(f"{word} in train: {word in set(train_data)}")
-
-# %%
-train_tokenized, test_tokenized = train_test_split(
-    gutenberg_tokenized, test_size=0.3, random_state=42
-)
-rprint(len(train_tokenized), len(test_tokenized))
-
-# %%
-oov_tokenized_test = set(test_tokenized) - set(train_tokenized)
-
-# %%
-rprint("OOV ([yellow]word-base):", len(oov_test))
-rprint("OOV ([green]sub-word):", len(oov_tokenized_test))
-
-# %% [markdown]
-# ## Entrenando nuestro modelo con BPE
-# ![](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmedia1.tenor.com%2Fimages%2Fd565618bb1217a7c435579d9172270d0%2Ftenor.gif%3Fitemid%3D3379322&f=1&nofb=1&ipt=9719714edb643995ce9d978c8bab77f5310204960093070e37e183d5372096d9&ipo=images)
-
-# %%
-# !pip install subword-nmt
-
-# %%
-# !ls {CORPORA_PATH}
-
-# %%
-# !cat {CORPORA_PATH}/gutenberg_plain.txt
-
-# %%
-# !subword-nmt learn-bpe -s 300 < \
-#  {CORPORA_PATH}/gutenberg_plain.txt > \
-#   {MODELS_PATH}/gutenberg.model
-
-# %%
-# !echo "I need to process this sentence because tokenization can be useful" \
-# | subword-nmt apply-bpe -c {MODELS_PATH}/gutenberg.model
-
-# %%
-# !subword-nmt learn-bpe -s 1500 < \
-# {CORPORA_PATH}/gutenberg_plain.txt > \
-#  {MODELS_PATH}/gutenberg_high.model
-
-# %%
-# !echo "I need to process this sentence because tokenization can be useful" \
-# | subword-nmt apply-bpe -c {MODELS_PATH}/gutenberg_high.model
-
-# %% [markdown]
-# ### Aplicandolo a otros corpus: La biblia 📖🇻🇦
-
-# %%
-BIBLE_FILE_NAMES = {
-    "spa": "spa-x-bible-reinavaleracontemporanea",
-    "eng": "eng-x-bible-kingjames",
-}
-
-# %%
-import requests
-
-
-def get_bible_corpus(lang: str) -> str:
-    """Download bible file corpus from GitHub repo"""
-    file_name = BIBLE_FILE_NAMES[lang]
-    r = requests.get(
-        f"https://raw.githubusercontent.com/ximenina/theturningpoint/main/Detailed/corpora/corpusPBC/{file_name}.txt.clean.txt"
-    )
-    return r.text
-
-
-def write_plain_text_corpus(raw_text: str, file_name: str) -> None:
-    """Write file text on disk"""
-    with open(f"{file_name}.txt", "w") as f:
-        f.write(raw_text)
-
-
-# %% [markdown]
-# #### Biblia en Inglés
-
-# %%
-eng_bible_plain_text = get_bible_corpus("eng")
-eng_bible_words = eng_bible_plain_text.lower().replace("\n", " ").split()
-
-# %%
-print(eng_bible_words[:10])
-
-# %%
-len(eng_bible_words)
-
-# %%
-eng_bible_types = Counter(eng_bible_words)
-
-# %%
-rprint(eng_bible_types.most_common(30))
-
-# %%
-eng_bible_lemmas_types = Counter(lemmatize(eng_bible_words, lang="en"))
-
-# %%
-write_plain_text_corpus(eng_bible_plain_text, f"{CORPORA_PATH}/eng-bible")
-
-# %%
-# !subword-nmt apply-bpe -c {MODELS_PATH}/gutenberg_high.model < \
-#  {CORPORA_PATH}/eng-bible.txt > \
-#  {CORPORA_PATH}/eng-bible-tokenized.txt
-
-# %%
-with open(f"{CORPORA_PATH}/eng-bible-tokenized.txt", "r") as f:
-    tokenized_data = f.read()
-eng_bible_tokenized = tokenized_data.split()
-
-# %%
-rprint(eng_bible_tokenized[:10])
-
-# %%
-len(eng_bible_tokenized)
-
-# %%
-eng_bible_tokenized_types = Counter(eng_bible_tokenized)
-len(eng_bible_tokenized_types)
-
-# %%
-eng_bible_tokenized_types.most_common(30)
-
-# %% [markdown]
-# #### ¿Qué pasa si aplicamos el modelo aprendido con Gutenberg a otras lenguas?
-
-# %%
-spa_bible_plain_text = get_bible_corpus("spa")
-spa_bible_words = spa_bible_plain_text.replace("\n", " ").lower().split()
-
-# %%
-spa_bible_words[:10]
-
-# %%
-len(spa_bible_words)
-
-# %%
-spa_bible_types = Counter(spa_bible_words)
-len(spa_bible_types)
-
-# %%
-spa_bible_types.most_common(30)
-
-# %%
-spa_bible_lemmas_types = Counter(lemmatize(spa_bible_words, lang="es"))
-len(spa_bible_lemmas_types)
-
-# %%
-write_plain_text_corpus(spa_bible_plain_text, f"{CORPORA_PATH}/spa-bible")
-
-# %%
-# !subword-nmt apply-bpe -c {MODELS_PATH}/gutenberg_high.model < \
-#  {CORPORA_PATH}/spa-bible.txt > \
-#  {CORPORA_PATH}/spa-bible-tokenized.txt
-
-# %%
-with open(f"{CORPORA_PATH}/spa-bible-tokenized.txt", "r") as f:
-    tokenized_text = f.read()
-spa_bible_tokenized = tokenized_text.split()
-
-# %%
-spa_bible_tokenized[:10]
-
-# %%
-len(spa_bible_tokenized)
-
-# %%
-spa_bible_tokenized_types = Counter(spa_bible_tokenized)
-len(spa_bible_tokenized_types)
-
-# %%
-spa_bible_tokenized_types.most_common(40)
-
-# %% [markdown]
-# ### Type-token Ratio (TTR)
-#
-# - Una forma de medir la variación del vocabulario en un corpus
-# - Este se calcula como $TTR = \frac{len(types)}{len(tokens)}$
-# - Puede ser útil para monitorear la variación lexica de un texto
-
-# %%
-rprint("Información de la biblia en Inglés")
-rprint("Tokens:", len(eng_bible_words))
-rprint("Types ([bright_magenta]word-base):", len(eng_bible_types))
-rprint("Types ([bright_yellow]lemmatized)", len(eng_bible_lemmas_types))
-rprint("Types ([bright_green]BPE):", len(eng_bible_tokenized_types))
-rprint("TTR ([bright_magenta]word-base):", len(eng_bible_types) / len(eng_bible_words))
-rprint("TTR ([bright_green]BPE):", len(eng_bible_tokenized_types) / len(eng_bible_tokenized))
-
-# %%
-rprint("Bible Spanish Information")
-rprint("Tokens:", len(spa_bible_words))
-rprint("Types ([bright_magenta]word-base):", len(spa_bible_types))
-rprint("Types ([bright_yellow]lemmatized)", len(spa_bible_lemmas_types))
-rprint("Types ([bright_green]BPE):", len(spa_bible_tokenized_types))
-rprint("TTR ([bright_magenta]word-base):", len(spa_bible_types) / len(spa_bible_words))
-rprint("TTR ([bright_green]BPE):", len(spa_bible_tokenized_types) / len(spa_bible_tokenized))
 
 # %%

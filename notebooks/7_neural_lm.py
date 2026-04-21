@@ -44,7 +44,6 @@ from nltk.stem.snowball import SnowballStemmer
 # ## Funciones de preprocesamiento
 
 # %%
-from nltk.corpus import stopwords
 import unicodedata
 
 
@@ -59,28 +58,9 @@ def strip_accents(s: str) -> str:
     )
 
 
-def preprocess_words(
-    words: list[str],
-    regex: str = r"[^\w+]",
-    lang: str = "en",
-    remove_stops: bool = False,
-    remove_accents: bool = False,
-) -> list[str]:
-    """Preprocess step for list of words in corpus"""
-    stop_lang = "english" if lang == "en" else "spanish"
-    result = []
-    for word in words:
-        word = re.sub(regex, "", word).lower()
-        if remove_stops and word in stopwords.words(stop_lang) or (len(word) < 2):
-            continue
-
-        if remove_accents:
-            word = strip_accents(word)
-        result.append(word)
-    return result
-
-
 def preprocess_text(text: str, to_lower: bool = True) -> str:
+    """Preprocess text by normalizing, lowercasing and removing extra spaces.
+    """
     # 1. Unicode Normalization (NFC)
     text = unicodedata.normalize("NFC", text)
 
@@ -363,7 +343,7 @@ rprint(
 # ## Word Embeddings (W2V, GloVe) 
 
 # %% [markdown]
-# Vamos a entrenar nuestras propias representaciones vectoriales
+# Vamos a entrenar nuestras propias representaciones vectoriales utilizando la biblioteca [Gensim](https://radimrehurek.com/gensim/).
 
 # %% [markdown]
 # ![we](https://miro.medium.com/v2/resize:fit:2000/1*SYiW1MUZul1NvL1kc1RxwQ.png)
@@ -392,8 +372,6 @@ from gensim.utils import simple_preprocess
 rprint(simple_preprocess(post["text"], deacc=True)[:10])
 
 # %%
-from datasets.dataset_dict import IterableDatasetDict
-from datasets.iterable_dataset import IterableDataset
 from tqdm.notebook import tqdm
 from datasets import load_dataset
 from gensim.utils import simple_preprocess
@@ -463,6 +441,8 @@ class Algorithms(Enum):
 
 # %%
 def load_model(model_path: str):
+    """Load a word2vec model from a given path.
+    """
     try:
         print(model_path)
         return word2vec.Word2Vec.load(model_path)
@@ -517,7 +497,7 @@ skipm_gram_model = load_model(
 # %%time
 cbow_model = train_model(
     CCNewsExtractor(lang="mx", max_posts=100_000),
-    "eswiki",
+    "es_news_hf",
     vector_size=100,
     window=3,
     workers=6,
@@ -722,7 +702,7 @@ corpora = []
 plaintext_corpora = {
     "abc": abc,
     "Gutenberg": gutenberg,
-    "Genesis": genesis,
+    #"Genesis": genesis, Este no lo usamos por una buena razón
     "Inaugural": inaugural,
     "State Union": state_union,
     "Web": webtext,
@@ -840,6 +820,7 @@ import time
 EMBEDDING_DIM = 200
 CONTEXT_SIZE = 2
 BATCH_SIZE = 256
+
 H = 100
 torch.manual_seed(42)
 # Tamaño del Vocabulario
@@ -906,7 +887,6 @@ os.makedirs(NN_MODELS_PATH, exist_ok=True)
 LM_PATH = os.path.join(NN_MODELS_PATH, "trigrams_nlm_cpu_epoch3.pt")
 
 # %%
-torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Training on device {device}")
 
 # 1. Pérdida. Negative log-likelihood loss
@@ -928,6 +908,7 @@ for epoch in range(EPOCHS):
         context_tensor = data_tensor[:, 0:2].to(device)
         target_tensor = data_tensor[:, 2].to(device)
 
+        # Resetamos los gradientes de la iteración anterior
         model.zero_grad()
 
         # FORWARD:
@@ -961,7 +942,7 @@ model
 
 
 # %%
-def get_model(path: str) -> TrigramModel:
+def get_torch_model(path: str) -> TrigramModel:
     """Obtiene modelo de pytorch desde disco"""
     model_loaded = TrigramModel(V, EMBEDDING_DIM, CONTEXT_SIZE, H)
     model_loaded.load_state_dict(torch.load(path))
@@ -970,7 +951,9 @@ def get_model(path: str) -> TrigramModel:
 
 
 # %%
-# model = get_model(PATH)
+model = get_torch_model(os.path.join(NN_MODELS_PATH, "lm_cpu_constext_2_epoch_2.dat"))
+
+# %%
 W1 = "<BOS>"
 W2 = "my"
 
@@ -1020,6 +1003,8 @@ def get_likely_words(
     words_indexes: dict,
     index_to_word: dict,
 ) -> list[tuple]:
+    """Dado un contexto obtiene las palabras más probables
+    """
     model_probs = {}
     words = context.split()
     idx_word_1 = get_word_id(words_indexes, words[0])
@@ -1063,6 +1048,7 @@ def get_next_top_p_word(words: list[tuple[float, str]], p: float = 0.8) -> str:
     
     # Recolectamos palabras hasta que la suma de probabilidades alcance el umbral 'p'
     for log_prob, word in words:
+        # Convertimos log_prob a probabilidad normal
         prob = np.exp(log_prob)
         valid_words.append(word)
         valid_probs.append(prob)
@@ -1115,31 +1101,70 @@ def generate_text(
 
 
 # %%
-sentence = "god said"
+sentence = "god tells"
 print(sentence, end=" ")
 generate_text(model, sentence, words_indexes, index_to_word)
 
 # %% [markdown]
-# # Práctica 4: Evaluación de modelos del lenguaje
+# # Práctica 4: Evaluación de modelos del lenguaje neuronales
 #
 # **Fecha: 5 de Mayo 2026 11:59pm**
+#
+# ### Formáto de entrega
+# - Crear una carpeta con el nombre de su equipo dentro de `practicas/`
+# - Incluir los archivos requeridos (notebook, script Python, README)
+# - Ejemplo de estructura:
+#
+# ```
+# practicas/
+# ├── krustaceo/
+# │   └── P4
+# │       ├── mi_practica4.ipynb
+# │       ├── mi_practica4.py
+# │       └── README.md  # <-- Incluir los nombres de los integrantes
+# ```
+#
+# #### Investigación
 #
 # La calidad de un modelo del lenguaje puede ser evaluado por medio de su perplejidad (perplexity)
 #
 # - Investigar como calcular la perplejidad de un modelo del lenguaje y como evaluarlo con esa medida
-#     - Incluir en el `README.md` de su entrega una síntesis de esta investigación (Un par de parrafos)
+#     - Incluir en el `README.md` de su entrega una síntesis de esta investigación. Sean breves
+#         - Explicación clara de qué es la **perplejidad** (perplexity) y cómo se calcula
+#         - Fórmula matemática con explicación de cada componente
+#         - Relación entre perplejidad y calidad del modelo
+#         - Ventajas y limitaciones de esta métrica
 # - Evalua el modelo entrenado en clase con los corpus de `nltk`
-# - Entrena un nuevo modelo del lenguaje neuronal con los corpus de `nltk` aplicando previamente sub-word tokenization al corpus 
+#     - Descarga el modelo acá
+#
+# #### Creación de modelos del lenguaje
+#
+# - Entrena un nuevo modelo del lenguaje neuronal con los corpus de `nltk` aplicando previamente sub-word tokenization a los corpus 
 #     - Puedes utilizar un modelo de tokenizacion pre-entrenado o entrenar uno desde cero
-#     - TODO: Test de evauación
-# - Evalua tu modelo calculando su perplejidad
-#     - Compara los resultados de la evaluación de los ambos modelos.
-#     - ¿Cúal es mejor? ¿Por qué?
+#     - Utiliza el corpus `genesis` de `nltk` como test de evaluación.
+# - Evalua tu modelo calculando su perplejidad.
+#
+#
+# #### Análisis comparativo
+#
+# - Realizar un análisis comparativo entre ambos modelos.
+#
+# | Métrica               | Modelo Base | Modelo Subword |
+# |-----------------------|-------------|----------------|
+# | Perplejidad (genesis) |             |                |
+# | Tamaño vocabulario    |             |                |
+# | OOV Rate              |             |                | 
+#
+# - Incluir en el `README.md`:
+#     - Discusión sobre qué modelo tuvo mejor desempeño y por qué
+#     - Ventajas y desventajas de cada enfoque
+#     - Recomendaciones para mejorar ambos modelos
+#
+#
+# **NOTA:** Sube tu modelo a alguna plataforma de almacenamiento (Google Drive, Nextcloud, Hugging Face, etc), proporciona el link de descarga y el código para cargar el modelo en memoria. **No subas tu modelo al repositorio de GitHub**.
 #
 # ## EXTRA
 #
 # - Diseña una estrategia de generación de usando el modelo del lenguaje entrenado con sub-word tokenization
 # - Se deben generar secuencias de palabras (no subwords)
-
-# %% [markdown]
-#
+# - Muestra tres ejemplos de generación
