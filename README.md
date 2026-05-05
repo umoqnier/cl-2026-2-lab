@@ -177,3 +177,66 @@ print(word_vectors.most_similar(positive=['woman', 'profession'], negative=['man
 3. Utiliza la función `.most_similar()` para identificar analogías que exhiba algún tipo de sesgo de los vectores pre-entrenados.
     - Explica brevemente que sesgo identificar
 4. Si fuera tu trabajo crear un modelo ¿Como mitigarías estos sesgos al crear vectores de palabras?
+
+## Práctica 4: Evaluación de modelos del lenguaje neuronales
+
+**Fecha: 5 de Mayo 2026 11:59pm**
+
+### Formáto de entrega
+- Crear una carpeta con el nombre de su equipo dentro de `practicas/`
+- Incluir los archivos requeridos (notebook, script Python, README)
+- Ejemplo de estructura:
+
+```
+practicas/
+├── krustaceo/
+│   └── P4
+│       ├── mi_practica4.ipynb
+│       ├── mi_practica4.py
+│       └── README.md  # <-- Incluir los nombres de los integrantes
+```
+
+#### Investigación
+
+La calidad de un modelo del lenguaje puede ser evaluado por medio de su perplejidad (perplexity)
+
+- Investigar como calcular la perplejidad de un modelo del lenguaje y como evaluarlo con esa medida
+    - Incluir en el `README.md` de su entrega una síntesis de esta investigación. Sean breves
+        - Explicación clara de qué es la **perplejidad** (perplexity) y cómo se calcula
+        - Fórmula matemática con explicación de cada componente
+        - Relación entre perplejidad y calidad del modelo
+        - Ventajas y limitaciones de esta métrica
+- Evalua el modelo entrenado en clase con los corpus de `nltk`
+    - Descarga el modelo acá
+
+#### Creación de modelos del lenguaje
+
+- Entrena un nuevo modelo del lenguaje neuronal con los corpus de `nltk` aplicando previamente sub-word tokenization a los corpus
+    - Puedes utilizar un modelo de tokenizacion pre-entrenado o entrenar uno desde cero
+    - Utiliza el corpus `genesis` de `nltk` como test de evaluación.
+- Evalua tu modelo calculando su perplejidad.
+
+
+#### Análisis comparativo
+
+- Realizar un análisis comparativo entre ambos modelos.
+
+| Métrica               | Modelo Base | Modelo Subword |
+|-----------------------|-------------|----------------|
+| Perplejidad (genesis) |             |                |
+| Tamaño vocabulario    |             |                |
+| OOV Rate              |             |                |
+
+- Incluir en el `README.md`:
+    - Discusión sobre qué modelo tuvo mejor desempeño y por qué
+    - Ventajas y desventajas de cada enfoque
+    - Recomendaciones para mejorar ambos modelos
+
+
+**NOTA:** Sube tu modelo a alguna plataforma de almacenamiento (Google Drive, Nextcloud, Hugging Face, etc), proporciona el link de descarga y el código para cargar el modelo en memoria. **No subas tu modelo al repositorio de GitHub**.
+
+### EXTRA
+
+- Diseña una estrategia de generación de usando el modelo del lenguaje entrenado con sub-word tokenization
+- Se deben generar secuencias de palabras (no subwords)
+- Muestra tres ejemplos de generación
