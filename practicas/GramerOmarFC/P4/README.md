@@ -89,9 +89,8 @@ El modelo **sub‑palabra (BPE)** supera claramente al modelo word‑level en to
 
 El modelo sub‑palabra (BPE) se ha subido a Google Drive. Puede descargarse desde el siguiente enlace:
 
-🔗 [Descargar modelo_bpe_trigram.pt](https://drive.google.com/uc?export=download&id=TU_ID_DE_ARCHIVO)
+🔗 [Descargar modelo_bpe_trigram.pt](https://drive.google.com/file/d/1IiYwwKMRPF897sZnRZ_Jg4q9LTV4L4Lj/view?usp=drive_link)
 
-> **Nota:** Reemplaza `TU_ID_DE_ARCHIVO` por el identificador real del archivo en Google Drive.
 
 ### Instrucciones de carga en Python
 
