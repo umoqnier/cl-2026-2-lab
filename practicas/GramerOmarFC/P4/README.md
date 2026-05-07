@@ -59,29 +59,31 @@ Se entrenaron dos modelos trigrama (contexto de 2 palabras anteriores) sobre un 
 - Se construyó un vocabulario de sub‑palabras.
 
 ---
-
 ## Evaluación y comparación
 
-| Métrica               | Modelo word‑level | Modelo sub‑palabra (BPE) |
-|-----------------------|------------------|--------------------------|
-| **Perplejidad (genesis)** | 1302.76          | 820.13                   |
-| **Tamaño del vocabulario** | 41,392           | 2,013                    |
-| **Tasa OOV**          | 36.63%           | 5.53%                    |
+| Métrica                          | Modelo word-level | Modelo sub-palabra (BPE) |
+|----------------------------------|------------------|--------------------------|
+| **Perplejidad (genesis)**        | 926.84           | 829.31                   |
+| **Tamaño del vocabulario**       | 41,392           | 2,013                    |
+| **Tasa OOV**                     | 36.6312%         | 5.5305%                  |
 
 ### Análisis
 
-El modelo **sub‑palabra (BPE)** supera claramente al modelo word‑level en todas las métricas:
-- **Perplejidad un 37% menor**: predice mejor la siguiente sub‑palabra porque maneja bien palabras desconocidas.
-- **Vocabulario 20 veces más pequeño**: reduce la complejidad del modelo y el riesgo de sobreentrenamiento.
-- **Tasa OOV solo del 5.53%** frente al 36.63% del word‑level. Con un corpus de entrenamiento más grande, la tasa OOV de BPE se acercaría a 0%.
+El modelo **sub-palabra (BPE)** supera al modelo word-level en todas las métricas evaluadas:
 
-**Conclusión:** La tokenización sub‑palabra es esencial para modelos del lenguaje modernos (GPT, BERT, etc.) porque reduce drásticamente el vocabulario y elimina casi por completo el problema de palabras fuera de vocabulario.
+- **Perplejidad aproximadamente 10.5% menor**: el modelo BPE realiza mejores predicciones porque puede representar palabras desconocidas mediante combinaciones de sub-palabras conocidas.
+- **Vocabulario más de 20 veces más pequeño**: esto reduce considerablemente la complejidad computacional, la memoria requerida y el riesgo de sobreentrenamiento.
+- **Tasa OOV mucho menor**: el modelo word-level presenta una tasa OOV de 36.63%, mientras que BPE reduce este valor a solo 5.53%, mostrando una mayor capacidad de generalización frente a palabras raras o no vistas durante el entrenamiento.
+
+
+**Conclusión:** La tokenización basada en sub-palabras es fundamental en modelos de lenguaje modernos (GPT, BERT, T5, etc.), ya que permite reducir drásticamente el tamaño del vocabulario mientras mantiene una excelente capacidad para representar palabras desconocidas y mejorar la generalización del modelo.
 
 ### Recomendaciones para mejorar ambos modelos
-- Aumentar los datos de entrenamiento (usar todas las oraciones de NLTK, no solo 5000).
-- Probar con más merges BPE (ej. 5000 o 10000).
-- Ajustar hiperparámetros: tamaño de embedding, capa oculta, learning rate.
-- Usar arquitecturas más potentes (LSTM, Transformer).
+- Aumentar los datos de entrenamiento (usar todas las oraciones disponibles de NLTK y no solo 5000).
+- Probar con un mayor número de merges BPE (por ejemplo, 5000 o 10000).
+- Ajustar hiperparámetros como tamaño de embedding, learning rate y número de capas ocultas.
+- Aplicar técnicas de suavizado más avanzadas para mejorar el modelado de secuencias raras.
+- Utilizar arquitecturas neuronales más potentes como LSTM, GRU o Transformers.
 
 ---
 
