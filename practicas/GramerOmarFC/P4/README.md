@@ -14,19 +14,28 @@ La **perplejidad** es una métrica utilizada para evaluar modelos probabilístic
 
 Para un modelo que asigna probabilidad \(P(w_i | \text{contexto})\) a cada palabra \(w_i\), la perplejidad se define como:
 
-\[
-\text{PPL}(W) = \exp\left( -\frac{1}{N} \sum_{i=1}^{N} \log_2 P(w_i \mid \text{contexto}) \right)
-\]
+$$
+\text{PPL}(W) = \exp\left(
+-\frac{1}{N}
+\sum_{i=1}^{N}
+\log_2 P(w_i \mid \text{contexto})
+\right)
+$$
 
 En la práctica, cuando entrenamos con *Negative Log-Likelihood* (NLL) usando logaritmo natural, la perplejidad se calcula como:
 
-\[
-\text{PPL} = \exp\left( \frac{1}{M} \sum_{j=1}^{M} \text{NLL}(s_j) \right)
-\]
+$$
+\text{PPL} =
+\exp\left(
+\frac{1}{M}
+\sum_{j=1}^{M}
+\text{NLL}(s_j)
+\right)
+$$
 
 donde:
-- \(M\) es el número total de palabras (o trigramas) en el corpus de prueba.
-- \(\text{NLL}(s_j) = -\log P(w_j \mid \text{contexto})\) es la pérdida para la palabra \(w_j\).
+- $M$ es el número total de palabras (o trigramas) en el corpus de prueba.
+- $\text{NLL}(s_j) = -\log P(w_j \mid \text{contexto})$ es la pérdida para la palabra $w_j$.
 
 ### Relación con la calidad del modelo
 
