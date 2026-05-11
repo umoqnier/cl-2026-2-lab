@@ -207,7 +207,8 @@ La calidad de un modelo del lenguaje puede ser evaluado por medio de su perpleji
         - Relación entre perplejidad y calidad del modelo
         - Ventajas y limitaciones de esta métrica
 - Evalua el modelo entrenado en clase con los corpus de `nltk`
-    - Descarga el modelo acá
+     - Descarga el modelo [acá](https://drive.google.com/file/d/1xSNO7DAMkBLL1g0D9WxUundXyy5PHdTH/view?usp=sharing)
+     - **Nota:** El modelo porporcionado es solo un place holder. Se recomienda re-entrenar uno para tener mejor desempeño.
 
 #### Creación de modelos del lenguaje
 
