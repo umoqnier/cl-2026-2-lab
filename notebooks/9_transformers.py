@@ -832,6 +832,12 @@ trainer = Trainer(
 # %%
 trainer.train()
 
+# %%
+# %load_ext tensorboard
+
+# %%
+# %tensorboard --logdir my-metric-trainer
+
 # %% [markdown]
 # ## Limitaciones y Bias de modelos
 
