@@ -17,6 +17,11 @@
 # # 10. Local first LLMs
 
 # %% [markdown]
+# <a target="_blank" href="https://colab.research.google.com/github/umoqnier/cl-2026-2-lab/blob/main/notebooks/10_local_first_llms.ipynb">
+#   <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
+# </a>
+
+# %% [markdown]
 # ![](https://realpython.com/cdn-cgi/image/width=960,format=auto/https://files.realpython.com/media/How-to-Integrate-Local-LLMs-With-Ollama-and-Python_Watermarked.835ee5f2672d.jpg)
 #
 # > sauce - https://realpython.com/ollama-python/
