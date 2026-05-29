@@ -176,6 +176,7 @@ print(word_vectors.most_similar(positive=['woman', 'profession'], negative=['man
 2. Identifica las diferencias en la lista de palabras asociadas a hombres/mujeres y profesiones, explica como esto reflejaría un sesgo de genero.
 3. Utiliza la función `.most_similar()` para identificar analogías que exhiba algún tipo de sesgo de los vectores pre-entrenados.
     - Explica brevemente que sesgo identificar
+<<<<<<< HEAD
 4. Si fuera tu trabajo crear un modelo ¿Como mitigarías estos sesgos al crear vectores de palabras?
 
 ## Práctica 4: Evaluación de modelos del lenguaje neuronales
@@ -284,3 +285,8 @@ practicas/
 ### Extra
 
 - Utiliza [code carbon](https://codecarbon.io/#howitwork) para reportar las emisiones de tu app
+||||||| a1abdfa
+> Utiliza bibliotecas con modelos preentrenados que te permitan realizar el etiquetado NER como [`spacy`](https://spacy.io/usage) o [`stanza`](https://stanfordnlp.github.io/stanza/#getting-started).
+=======
+4. Si fuera tu trabajo crear un modelo ¿Como mitigarías estos sesgos al crear vectores de palabras?
+>>>>>>> luisfc
