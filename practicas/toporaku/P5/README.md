@@ -104,6 +104,26 @@ Durante el proceso de ajuste fino y puesta en producción del detector de spam, 
 *   **Autenticación Automatizada:** La interactividad requerida por `notebook_login()` se congela frecuentemente en entornos de Jupyter no interactivos o headless. Se implementó una integración robusta utilizando la lectura segura de secretos en Colab (`google.colab.userdata`) para automatizar la autenticación a través de la variable `HF_TOKEN`.
 *   **Empaquetado y Despliegue en Spaces:** Asegurar que el contenedor virtual de Hugging Face funcionara sin errores de compilación exigió refinar un pipeline en `deploy_space.py` que genera automáticamente un archivo `requirements.txt` minimalista (excluyendo dependencias pesadas de entrenamiento como `accelerate` o `evaluate`) y sube únicamente lo indispensable para la inferencia con Gradio, garantizando arranques limpios y rápidos en el servidor.
 
+### 3. Reporte de Emisiones de Carbono (Extra)
+
+Se utilizó la biblioteca **CodeCarbon** (`EmissionsTracker`) para registrar el impacto ecológico y energético del entrenamiento del modelo DistilBERT (el proceso más costoso computacionalmente).
+
+#### Datos de Consumo y Emisiones (Ajuste Fino en GPU L4)
+
+| Métrica | Registro Real (`emissions.csv`) | Descripción |
+|---------|--------------------------------|-------------|
+| **Tiempo de Ejecución** | **32.54 segundos** | Duración de las 3 épocas de fine-tuning. |
+| **Hardware Empleado** | **1 x NVIDIA L4 GPU** + Intel(R) Xeon(R) CPU + 53 GB RAM | Entorno acelerado de Google Colab. |
+| **Energía Consumida** | **~0.00105 kWh** (1.05 Wh) | Consumo combinado acumulado de GPU, CPU y memoria RAM. |
+| **Emisiones de CO2eq** | **~0.367 g CO₂eq** (0.000367 kg) | Huella de carbono total emitida a la atmósfera. |
+
+#### Comparativa de Impacto
+Para dimensionar el impacto, emitir **0.367 gramos de CO₂eq** equivale aproximadamente a:
+- Conducir un automóvil de gasolina promedio durante **1.9 metros**.
+- Mantener encendida una bombilla LED de 10W por **14 minutos**.
+
+Dado el uso de una arquitectura ligera y destilada (DistilBERT) y un volumen de datos optimizado, el impacto ecológico es sumamente bajo, demostrando la eficiencia del enfoque de transferencia de aprendizaje (*Transfer Learning*) frente al preentrenamiento desde cero.
+
 ---
 
 ## Referencias
