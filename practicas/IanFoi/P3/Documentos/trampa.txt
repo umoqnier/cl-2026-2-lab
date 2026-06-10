@@ -1,0 +1,14 @@
+Había una vez, en un valle prehistórico que parecía una verdadera estructura algebraica abstracta, dos dinosaurios muy distintos: Vector, un Velociraptor de plumaje rudimentario, y Escalar, una enorme Branquiosaurio que debía realizar prolongadas migraciones para encontrar alimento fresco. Aunque uno era un depredador y la otra una herbívora, ambos consideraban que el movimiento era el objeto de estudio fundamental de su mundo.
+Un día, decidieron presentar sus ideas frente a un gran lago de lodo seco.
+—Mira, Escalar —dijo Vector—. Para definir mi posición y obtener mi presa, necesito dos cosas: una dirección y una magnitud. A eso lo llamo un vector, y nosotros somos las entidades matemáticas de este valle.
+Escalar asintió, mientras masticaba fibras vegetales.
+—Y yo soy el escalar. Yo no tengo dirección, formo parte de un campo F, como los números reales. Solo soy un número que puede aplicar una fuerza para estirar o encoger tus saltos. Si te digo que saltes "2", duplicas tu longitud.
+Vector trazó una línea en el lodo cerca de unos nidos fosilizados para desarrollar su teoría.
+—Pero aquí viene lo importante: este valle es un Espacio Vectorial. Para que lo sea en todos los casos, debemos considerar y respetar rigurosamente ciertos axiomas.
+Vector dio un salto hacia el norte (u) y luego uno hacia el este (v).
+—Al realizar la suma de mis dos movimientos, logro obtener un nuevo camino que todavía está dentro de nuestro valle. A esto se le llama propiedad de cerradura bajo la suma. Nunca apareceré mágicamente en otra dimensión, siempre seré parte de este mismo conjunto.
+Escalar señaló una piedra con evidencias geológicas para presentar otro punto.
+—Debe existir un salto que no te mueva a ninguna parte, el elemento neutro aditivo. Si te quedas quieto, sumas el vector 0 y te mantienes donde estás. Sin un origen, no hay orden.
+—Y si salto hacia adelante para atacar —añadió Vector—, siempre debe existir un salto igual pero en dirección opuesta, mi inverso aditivo (-u), que me devuelva al inicio de forma exacta.
+Escalar explicó que, al aplicar la distributividad del escalar respecto a la suma vectorial, si ella multiplicaba una suma de saltos de Vector, era lo mismo que multiplicar cada uno por separado. Las leyes de la multiplicación escalar eran tan precisas como la fuerza destructiva de una mordida.
+Al final del día, comprendieron que un Espacio Vectorial no es solo flechas y números, sino un alto nivel de abstracción donde los elementos siguen reglas perfectas. Desde entonces, los dinosaurios ya no solo corrían por instinto, sino que se desplazaban con la elegancia de una combinación lineal, logrando encontrar que incluso los polinomios o las matrices bidimensionales podían comportarse de esta forma en su ecosistema, formando parte de ese rompecabezas colosal que es el álgebra lineal.
